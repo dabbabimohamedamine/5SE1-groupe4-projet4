@@ -8,7 +8,7 @@
         <version>2.7.13</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent> 
-    <groupId>tn.esprit</groupId>
+    <groupId>tn.esprit</groupId> 
     <artifactId>DevOps_Project</artifactId>
     <version>1.0</version>
     <name>DevOps_Project</name>

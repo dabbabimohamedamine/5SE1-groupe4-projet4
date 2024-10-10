@@ -23,6 +23,7 @@ pipeline {
         stage('Run Unit Tests') {
             steps {
                 echo 'Running Unit Tests...'
+                // Runs the tests using Maven's test goal
                 sh 'mvn test'
             }
         }
@@ -30,6 +31,7 @@ pipeline {
     post {
         success {
             echo 'Build and tests completed successfully!'
+            // Archive both the artifact and test results
             archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
             junit 'target/surefire-reports/*.xml'
         }

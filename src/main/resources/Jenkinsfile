@@ -1,5 +1,5 @@
 pipeline {
-    agent any 
+    agent any
 
     stages {
         stage('Checkout GIT') {
@@ -20,12 +20,16 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-        
+        stage('Run Unit Tests') {
+            steps {
+                echo 'Running Unit Tests...'
+                sh 'mvn test'
+            }
+        }
     }
     post {
         success {
             echo 'Build and tests completed successfully!'
-            // Archive both the artifact and test results
             archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
             junit 'target/surefire-reports/*.xml'
         }

@@ -20,13 +20,7 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-        stage('Run Unit Tests') {
-            steps {
-                echo 'Running Unit Tests...'
-                // Runs the tests using Maven's test goal
-                sh 'mvn test'
-            }
-        }
+        
     }
     post {
         success {

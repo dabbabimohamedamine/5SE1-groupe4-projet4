@@ -2,6 +2,7 @@ package tn.esprit.devops_project.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.devops_project.entities.Invoice;
 import tn.esprit.devops_project.entities.Operator;
@@ -15,16 +16,19 @@ import tn.esprit.devops_project.services.Iservices.IInvoiceService;
 import java.util.Date;
 import java.util.List;
 
-@Service
+
 @Slf4j
 @AllArgsConstructor
+@Service
 public class InvoiceServiceImpl implements IInvoiceService {
+
 
 	final InvoiceRepository invoiceRepository;
 	final OperatorRepository operatorRepository;
 	final InvoiceDetailRepository invoiceDetailRepository;
 	final SupplierRepository supplierRepository;
-	
+
+
 	@Override
 	public List<Invoice> retrieveAllInvoices() {
 		return invoiceRepository.findAll();
@@ -43,6 +47,11 @@ public class InvoiceServiceImpl implements IInvoiceService {
 	public Invoice retrieveInvoice(Long invoiceId) {
 
 		return invoiceRepository.findById(invoiceId).orElseThrow(() -> new NullPointerException("Invoice not found"));
+	}
+
+	@Override
+	public Invoice addInvoice(Invoice invoice){
+		return invoiceRepository.save(invoice);
 	}
 
 	@Override

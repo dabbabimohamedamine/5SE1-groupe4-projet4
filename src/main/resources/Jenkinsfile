@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout GIT') {
+            steps {
+                echo 'Pulling...'
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']],
+                    doGenerateSubmoduleConfigurations: false, extensions: [],
+                    userRemoteConfigs: [[
+                        credentialsId: '1dd4e651-22db-44e2-8285-a907f0267d5b',
+                        url: 'https://github.com/dabbabimohamedamine/devops-back.git'
+                    ]]
+                ])
+            }
+        }
+        stage('Build and Package') {
+                steps {
+                    echo 'Running Maven clean and package...'
+                    sh 'mvn clean package'
+                }
+        }
+    }
+    post {
+            success {
+                echo 'Build completed successfully!'
+                archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
+            }
+            failure {
+                echo 'Build failed.'
+            }
+        }
+}

@@ -20,6 +20,11 @@ public class InvoiceController {
        return invoiceService.retrieveAllInvoices();
     }
 
+    @PostMapping("/invoice")
+    public Invoice addInvoice(@PathVariable Invoice invoice) {
+        return invoiceService.addInvoice(invoice);
+    }
+
     @GetMapping("/invoice/{invoiceId}")
     public Invoice retrieveInvoice(@PathVariable Long invoiceId) {
         return invoiceService.retrieveInvoice(invoiceId);

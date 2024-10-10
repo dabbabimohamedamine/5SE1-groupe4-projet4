@@ -8,6 +8,8 @@ import java.util.List;
 public interface IInvoiceService {
 	List<Invoice> retrieveAllInvoices();
 
+	Invoice addInvoice(Invoice invoice);
+
 	List<Invoice> getInvoicesBySupplier(Long idSupplier);
 
 	void cancelInvoice(Long id);
@@ -17,4 +19,5 @@ public interface IInvoiceService {
 	void assignOperatorToInvoice(Long idOperator, Long idInvoice);
 
 	float getTotalAmountInvoiceBetweenDates(Date startDate, Date endDate);
+
 }

@@ -1,5 +1,5 @@
 pipeline {
-    agent any 
+    agent any
 
     stages {
         stage('Checkout GIT') {
@@ -15,22 +15,19 @@ pipeline {
             }
         }
         stage('Build and Package') {
-            steps {
-                echo 'Running Maven clean and package...'
-                sh 'mvn clean package'
-            }
+                steps {
+                    echo 'Running Maven clean and package...'
+                    sh 'mvn clean package'
+                }                
         }
-        
     }
     post {
-        success {
-            echo 'Build and tests completed successfully!'
-            // Archive both the artifact and test results
-            archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
-            junit 'target/surefire-reports/*.xml'
+            success {
+                echo 'Build completed successfully!'
+                archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
+            }          
+            failure {
+                echo 'Build failed.'
+            }
         }
-        failure {
-            echo 'Build or tests failed.'
-        }
-    }
 }

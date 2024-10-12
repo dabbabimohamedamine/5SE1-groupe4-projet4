@@ -17,35 +17,29 @@ import static org.mockito.Mockito.when;
 public class InvoiceServiceImplTest {
 
     @InjectMocks
-    private InvoiceServiceImpl invoiceService; // Injecting the service to be tested
+    private InvoiceServiceImpl invoiceService;
 
     @Mock
-    private InvoiceRepository invoiceRepository; // Mocking the repository
+    private InvoiceRepository invoiceRepository;
 
     @BeforeEach
     public void setup() {
-        // Initialize the mocks
         MockitoAnnotations.openMocks(this);
 
-        // Set up mock behavior for the repository
         when(invoiceRepository.getTotalAmountInvoiceBetweenDates(
                 new Date(2023 - 1900, 9, 1),
                 new Date(2023 - 1900, 9, 6)))
-                .thenReturn(300.0f);  // Mock the total amount result
+                .thenReturn(300.0f);
 
-        // You can set up additional mock behaviors if needed for other tests
     }
 
     @Test
     public void testGetTotalAmountInvoiceBetweenDates() {
-        // Define the date range
         Date startDate = new Date(2023 - 1900, 9, 1); // Oct 1, 2023
         Date endDate = new Date(2023 - 1900, 9, 6); // Oct 6, 2023
 
-        // Call the method and get the result
         float totalAmount = invoiceService.getTotalAmountInvoiceBetweenDates(startDate, endDate);
 
-        // Verify that the total matches the expected amount (mocked as 300)
         assertEquals(300.0f, totalAmount);
     }
 }

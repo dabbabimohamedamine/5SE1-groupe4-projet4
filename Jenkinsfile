@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_REPO = 'mohamedaminedabbabi/5se-g4'
+        DOCKER_HUB_REPO = 'mohamedaminedabbabi/5se1-g4'
         DOCKER_HUB_CREDENTIALS = 'dockerhub-5se-g4' // Make sure the ID is correct
     }
 

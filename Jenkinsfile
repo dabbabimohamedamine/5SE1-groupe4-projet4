@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-            DOCKER_HUB_REPO = 'mohamedaminedabbabi/5se-g4'
-            DOCKER_HUB_CREDENTIALS = 'dokerhub-5se-g4'
-        }
+        DOCKER_HUB_REPO = 'mohamedaminedabbabi/5se-g4'
+        DOCKER_HUB_CREDENTIALS = 'dockerhub-5se-g4' // Make sure the ID is correct
+    }
 
     stages {
         stage('Checkout GIT') {
             steps {
-                echo 'Pulling...'
+                echo 'Pulling source code from GitHub...'
                 checkout([$class: 'GitSCM', branches: [[name: '*/master']],
                     doGenerateSubmoduleConfigurations: false, extensions: [],
                     userRemoteConfigs: [[
@@ -19,43 +19,52 @@ pipeline {
                 ])
             }
         }
+
         stage('Run Unit Tests') {
-                    steps {
-                        echo 'Running Unit Tests...'
-                        sh 'mvn test'
-                    }
-                }
+            steps {
+                echo 'Running Unit Tests...'
+                sh 'mvn test'
+            }
+        }
+
         stage('Build and Package') {
             steps {
                 echo 'Running Maven clean and package...'
                 sh 'mvn clean package'
             }
         }
+
         stage('Build Docker Image') {
-                    steps {
-                        script {
-                            docker.build("${env.DOCKER_HUB_REPO}:latest")
-                        }
+            steps {
+                script {
+                    echo "Building Docker image: ${env.DOCKER_HUB_REPO}:latest"
+                    // Use Docker to build the image
+                    def app = docker.build("${env.DOCKER_HUB_REPO}:latest")
+                }
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                script {
+                    echo "Pushing Docker image to DockerHub: ${env.DOCKER_HUB_REPO}:latest"
+                    // Push the image to DockerHub
+                    docker.withRegistry('https://index.docker.io/v1/', "${env.DOCKER_HUB_CREDENTIALS}") {
+                        sh "docker push ${env.DOCKER_HUB_REPO}:latest"
                     }
                 }
-                stage('Push to DockerHub') {
-                    steps {
-                        script {
-                            docker.withRegistry('https://index.docker.io/v1/', "${env.DOCKER_HUB_CREDENTIALS}") {
-                                sh "docker push ${env.DOCKER_HUB_REPO}:latest"
-                            }
-                        }
-                    }
-                }
+            }
+        }
+    }
+
     post {
         success {
-            echo 'Build and tests completed successfully!'
+            echo 'Build, tests, and Docker image creation completed successfully!'
             archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
             junit 'target/surefire-reports/*.xml'
         }
         failure {
-            echo 'Build or tests failed.'
+            echo 'Build, tests, or Docker image creation failed.'
         }
-    }
     }
 }

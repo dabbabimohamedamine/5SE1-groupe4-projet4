@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_HUB_REPO = 'mohamedaminedabbabi/5se1-g4'
-        DOCKER_HUB_CREDENTIALS = 'dockerhub-5se-g4' // Make sure the ID is correct
+        DOCKER_HUB_CREDENTIALS = 'dokerhub-5se-g4' // Make sure the ID is correct
     }
 
     stages {

@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_REPO = 'mohamedaminedabbabi/5se1-g4'
-        DOCKER_HUB_CREDENTIALS = 'dokerhub-5se-g4' // Make sure the ID is correct
+        DOCKER_HUB_REPO = 'mohamedaminedbbabi/5se1-g4'   // Your DockerHub repository
+        DOCKER_HUB_CREDENTIALS = 'dockerhub-5se-g4'        // DockerHub credentials stored in Jenkins
     }
 
     stages {
@@ -38,8 +38,8 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image: ${env.DOCKER_HUB_REPO}:latest"
-                    // Use Docker to build the image
-                    def app = docker.build("${env.DOCKER_HUB_REPO}:latest")
+                    // Build the Docker image
+                    sh "docker build -t ${env.DOCKER_HUB_REPO}:latest ."
                 }
             }
         }

@@ -9,6 +9,7 @@ pipeline {
     stages {
         stage('Checkout GIT') {
             steps {
+                cleanWs()
                 echo 'Pulling source code from GitHub...'
                 checkout([$class: 'GitSCM', branches: [[name: '**']],
                     doGenerateSubmoduleConfigurations: false, extensions: [],

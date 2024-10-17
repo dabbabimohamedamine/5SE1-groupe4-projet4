@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_REPO = 'mohamedaminedbbabi/5se1-g4'   // Your DockerHub repository
-        DOCKER_HUB_CREDENTIALS = 'dockerhub-5se-g4'        // DockerHub credentials stored in Jenkins
+        DOCKER_HUB_REPO = 'mohamedaminedbbabi/5se1-g4'
+        DOCKER_HUB_CREDENTIALS = 'dockerhub-5se-g4'
     }
 
     stages {
         stage('Checkout GIT') {
             steps {
                 echo 'Pulling source code from GitHub...'
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']],
+                checkout([$class: 'GitSCM', branches: [[name: '**']],
                     doGenerateSubmoduleConfigurations: false, extensions: [],
                     userRemoteConfigs: [[
                         credentialsId: '1dd4e651-22db-44e2-8285-a907f0267d5b',
@@ -37,9 +37,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    echo "Building Docker image: ${env.DOCKER_HUB_REPO}:latest"
-                    // Build the Docker image
-                    sh "docker build -t ${env.DOCKER_HUB_REPO}:latest ."
+                    def imageTag = "${env.DOCKER_HUB_REPO}:${env.BRANCH_NAME}"
+                    echo "Building Docker image: ${imageTag}"
+                    sh "docker build -t ${imageTag} ."
                 }
             }
         }
@@ -47,10 +47,10 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
-                    echo "Pushing Docker image to DockerHub: ${env.DOCKER_HUB_REPO}:latest"
-                    // Push the image to DockerHub
+                    def imageTag = "${env.DOCKER_HUB_REPO}:${env.BRANCH_NAME}"
+                    echo "Pushing Docker image to DockerHub: ${imageTag}"
                     docker.withRegistry('https://index.docker.io/v1/', "${env.DOCKER_HUB_CREDENTIALS}") {
-                        sh "docker push ${env.DOCKER_HUB_REPO}:latest"
+                        sh "docker push ${imageTag}"
                     }
                 }
             }

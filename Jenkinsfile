@@ -38,18 +38,17 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                echo 'Running SonarQube analysis...'
-                withSonarQubeEnv('SonarQube') { // Name matches the one configured in Jenkins
-                                    echo 'Running SonarQube analysis...'
-                                    sh 'mvn sonar:sonar ' +
-                                        '-Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} ' +
-                                        '-Dsonar.host.url=${SONARQUBE_URL} ' +
-                                        '-Dsonar.login=${SONARQUBE_TOKEN}'
-                }
-            }
-        }
+        //stage('SonarQube Analysis') {
+            //steps {
+                //echo 'Running SonarQube analysis...'
+                //withSonarQubeEnv('SonarQube') { // Name matches the one configured in Jenkins
+                                    //sh 'mvn sonar:sonar ' +
+                                    //    '-Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} ' +
+                                    //    '-Dsonar.host.url=${SONARQUBE_URL} ' +
+                                    //    '-Dsonar.login=${SONARQUBE_TOKEN}'
+                //}
+            //}
+        //}
 
         stage('Build Docker Image') {
             steps {

@@ -6,7 +6,7 @@ pipeline {
         DOCKER_HUB_CREDENTIALS = 'dockerhub-5se-g4'
         SONARQUBE_URL = 'http://192.168.17.128:9000'
         SONARQUBE_TOKEN = credentials('f4d2173cec0b90fcff8e2f0fcc67bcdb794946fe')
-        //SONARQUBE_PROJECT_KEY = 'tn.esprit.amin.devops_project'
+        SONARQUBE_PROJECT_KEY = 'tn.esprit.amin.devops_project'
     }
 
     stages {

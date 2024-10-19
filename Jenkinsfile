@@ -6,7 +6,7 @@ pipeline {
         DOCKER_HUB_CREDENTIALS = 'dockerhub-5se-g4'
         SONARQUBE_URL = 'http://192.168.17.128:9000'
         SONARQUBE_TOKEN = credentials('Sonar-token')
-        //SONARQUBE_PROJECT_KEY = 'tn.esprit.amin.devops_project'
+        SONARQUBE_PROJECT_KEY = 'tn.esprit.amin.devops_project'
     }
 
     stages {
@@ -31,24 +31,24 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+                    steps {
+                        echo 'Running SonarQube analysis...'
+                        withSonarQubeEnv('SonarQube') { // Name matches the one configured in Jenkins
+                                            sh 'mvn sonar:sonar ' +
+                                                '-Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} ' +
+                                                '-Dsonar.host.url=${SONARQUBE_URL} ' +
+                                                '-Dsonar.login=${SONARQUBE_TOKEN}'
+                        }
+                    }
+                }
+
         stage('Build and Package') {
             steps {
                 echo 'Running Maven clean and package...'
                 sh 'mvn clean package'
             }
         }
-
-        //stage('SonarQube Analysis') {
-            //steps {
-                //echo 'Running SonarQube analysis...'
-                //withSonarQubeEnv('SonarQube') { // Name matches the one configured in Jenkins
-                                    //sh 'mvn sonar:sonar ' +
-                                    //    '-Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} ' +
-                                    //    '-Dsonar.host.url=${SONARQUBE_URL} ' +
-                                    //    '-Dsonar.login=${SONARQUBE_TOKEN}'
-                //}
-            //}
-        //}
 
         stage('Build Docker Image') {
             steps {

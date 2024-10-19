@@ -2,7 +2,6 @@ package tn.esprit.devops_project.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.devops_project.entities.Invoice;
 import tn.esprit.devops_project.entities.Operator;
@@ -13,7 +12,7 @@ import tn.esprit.devops_project.repositories.OperatorRepository;
 import tn.esprit.devops_project.repositories.SupplierRepository;
 import tn.esprit.devops_project.services.Iservices.IInvoiceService;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -36,8 +35,9 @@ public class InvoiceServiceImpl implements IInvoiceService {
 	@Override
 	public void cancelInvoice(Long invoiceId) {
 		// method 01
-		Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new NullPointerException("Invoice not found"));
+		Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new NullPointerException("INVOICE_NOT_FOUND"));
 		invoice.setArchived(true);
+		invoiceRepository.save(invoice);
 		invoiceRepository.save(invoice);
 		//method 02 (Avec JPQL)
 		invoiceRepository.updateInvoice(invoiceId);
@@ -69,7 +69,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
 	}
 
 	@Override
-	public float getTotalAmountInvoiceBetweenDates(Date startDate, Date endDate) {
+	public float getTotalAmountInvoiceBetweenDates(LocalDate startDate, LocalDate endDate) {
 		return invoiceRepository.getTotalAmountInvoiceBetweenDates(startDate, endDate);
 	}
 

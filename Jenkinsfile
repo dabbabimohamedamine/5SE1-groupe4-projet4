@@ -4,6 +4,8 @@ pipeline {
     environment {
         DOCKER_HUB_REPO = 'mohamedaminedbbabi/5se1-g4'
         DOCKER_HUB_CREDENTIALS = 'dockerhub-5se-g4'
+        SONARQUBE_URL = 'http://192.168.17.128:9000'
+        SONARQUBE_TOKEN = credentials('f4d2173cec0b90fcff8e2f0fcc67bcdb794946fe')
     }
 
     stages {
@@ -35,6 +37,20 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                echo 'Running SonarQube analysis...'
+                withSonarQubeEnv('SonarQube') { // Assumes SonarQube is configured in Jenkins with the name 'SonarQube'
+                    sh """
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=devops_project \
+                        -Dsonar.host.url=${SONARQUBE_URL} \
+                        -Dsonar.login=${SONARQUBE_TOKEN}
+                    """
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -60,7 +76,7 @@ pipeline {
 
     post {
         success {
-            echo 'Build, tests, and Docker image creation completed successfully!'
+            echo 'Build, tests, SonarQube analysis, and Docker image creation completed successfully!'
             archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
             junit 'target/surefire-reports/*.xml'
         }

@@ -7,6 +7,7 @@ pipeline {
         SONARQUBE_URL = 'http://192.168.17.128:9000'
         SONARQUBE_TOKEN = credentials('Sonar-token')
         SONARQUBE_PROJECT_KEY = 'tn.esprit.amin.devops_project'
+
     }
 
     stages {
@@ -34,7 +35,7 @@ pipeline {
         stage('SonarQube Analysis') {
                     steps {
                         echo 'Running SonarQube analysis...'
-                        withSonarQubeEnv('SonarQube') { // Name matches the one configured in Jenkins
+                        withSonarQubeEnv('SonarQube') {
                                             sh 'mvn sonar:sonar ' +
                                                 '-Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} ' +
                                                 '-Dsonar.host.url=${SONARQUBE_URL} ' +
@@ -49,6 +50,13 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
+
+         stage('Deploy to Nexus') {
+                    steps {
+                        echo 'Deploying artifact to Nexus...'
+                        sh 'mvn deploy -DskipTests=true -s /usr/share/maven/conf/settings.xml'
+                    }
+                }
 
         stage('Build Docker Image') {
             steps {

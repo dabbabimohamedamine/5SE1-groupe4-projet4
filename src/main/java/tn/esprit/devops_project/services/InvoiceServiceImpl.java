@@ -12,19 +12,22 @@ import tn.esprit.devops_project.repositories.OperatorRepository;
 import tn.esprit.devops_project.repositories.SupplierRepository;
 import tn.esprit.devops_project.services.Iservices.IInvoiceService;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-@Service
+
 @Slf4j
 @AllArgsConstructor
+@Service
 public class InvoiceServiceImpl implements IInvoiceService {
+
 
 	final InvoiceRepository invoiceRepository;
 	final OperatorRepository operatorRepository;
 	final InvoiceDetailRepository invoiceDetailRepository;
 	final SupplierRepository supplierRepository;
-	
+
+
 	@Override
 	public List<Invoice> retrieveAllInvoices() {
 		return invoiceRepository.findAll();
@@ -32,8 +35,9 @@ public class InvoiceServiceImpl implements IInvoiceService {
 	@Override
 	public void cancelInvoice(Long invoiceId) {
 		// method 01
-		Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new NullPointerException("Invoice not found"));
+		Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new NullPointerException("INVOICE_NOT_FOUND"));
 		invoice.setArchived(true);
+		invoiceRepository.save(invoice);
 		invoiceRepository.save(invoice);
 		//method 02 (Avec JPQL)
 		invoiceRepository.updateInvoice(invoiceId);
@@ -43,6 +47,11 @@ public class InvoiceServiceImpl implements IInvoiceService {
 	public Invoice retrieveInvoice(Long invoiceId) {
 
 		return invoiceRepository.findById(invoiceId).orElseThrow(() -> new NullPointerException("Invoice not found"));
+	}
+
+	@Override
+	public Invoice addInvoice(Invoice invoice){
+		return invoiceRepository.save(invoice);
 	}
 
 	@Override
@@ -60,7 +69,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
 	}
 
 	@Override
-	public float getTotalAmountInvoiceBetweenDates(Date startDate, Date endDate) {
+	public float getTotalAmountInvoiceBetweenDates(LocalDate startDate, LocalDate endDate) {
 		return invoiceRepository.getTotalAmountInvoiceBetweenDates(startDate, endDate);
 	}
 

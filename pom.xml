@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion> 
-    <parent>  
+    <modelVersion>4.0.0</modelVersion>  
+    <parent>   
+
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.13</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>tn.esprit</groupId>
+    <groupId>tn.esprit</groupId> 
     <artifactId>DevOps_Project</artifactId>
     <version>1.0</version>
     <name>DevOps_Project</name>
     <description>DevOps_Project</description>
     <properties>
         <java.version>11</java.version>
+        <sonar.projectKey>tn.esprit.amin.devops_project</sonar.projectKey>
+        <sonar.host.url>http://192.168.17.128:9000</sonar.host.url>
+        <sonar.login>f4d2173cec0b90fcff8e2f0fcc67bcdb794946fe</sonar.login>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -70,6 +88,16 @@
             </plugin>
         </plugins>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>nexus</id> <!-- Same as in settings.xml -->
+            <url>http://192.168.17.128:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <url>http://192.168.17.128:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
 <!-- test1  -->

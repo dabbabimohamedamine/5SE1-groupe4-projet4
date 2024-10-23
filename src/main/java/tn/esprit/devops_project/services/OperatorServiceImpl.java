@@ -24,6 +24,7 @@ public class OperatorServiceImpl implements IOperatorService {
 
 	@Override
 	public Operator addOperator(Operator operator) {
+
 		return operatorRepository.save(operator);
 	}
 

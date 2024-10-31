@@ -1,4 +1,4 @@
-/*package tn.esprit.devops_project.services;
+package tn.esprit.devops_project.services;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +38,3 @@ public void testAddOperator() {
         }
         }
 
- */

@@ -15,6 +15,9 @@
     <description>DevOps_Project</description>
     <properties>
         <java.version>11</java.version>
+        <sonar.projectKey>tn.esprit.anis.devops_project</sonar.projectKey>
+        <sonar.host.url>http://192.168.17.128:9000</sonar.host.url>
+        <sonar.login>9f471f7358e20133b786fb6b2b7bd9e1f418dc8f</sonar.login>
     </properties>
     <dependencies>
         <dependency>

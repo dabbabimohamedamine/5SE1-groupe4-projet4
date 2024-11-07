@@ -15,7 +15,7 @@ pipeline {
             steps {
                 cleanWs()
                 echo 'Pulling source code from GitHub...'
-                checkout([$class: 'GitSCM', branches: [[name: '**']],
+                checkout([$class: 'GitSCM', branches: [[name: 'amine-dabbabi']],
                     doGenerateSubmoduleConfigurations: false, extensions: [],
                     userRemoteConfigs: [[
                         credentialsId: '1dd4e651-22db-44e2-8285-a907f0267d5b',

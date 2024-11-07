@@ -14,7 +14,10 @@
     <name>DevOps_Project</name>
     <description>DevOps_Project</description>
     <properties>
-         <java.version>11</java.version>
+        <java.version>11</java.version>
+        <sonar.projectKey>tn.esprit.fares.devops_project</sonar.projectKey>
+        <sonar.host.url>http://192.168.177.128:9000</sonar.host.url>
+        <sonar.login>f8a6e4f8ed8a8c33b95fe1ab07112f65cba8b6cd</sonar.login>
     </properties>
     <dependencies>
         <dependency>
@@ -84,6 +87,17 @@
             </plugin>
         </plugins>
     </build>
-
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>Nexus Repository</name>
+            <url>http://192.168.177.128:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://192.168.177.128:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
 <!-- test1  -->

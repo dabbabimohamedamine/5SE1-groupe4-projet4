@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.devops_project.entities.Supplier;
+import tn.esprit.devops_project.entities.SupplierCategory;
+import tn.esprit.devops_project.entities.SupplierDTO;
 import tn.esprit.devops_project.repositories.SupplierRepository;
 import tn.esprit.devops_project.services.Iservices.ISupplierService;
 
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -18,32 +20,52 @@ public class SupplierServiceImpl implements ISupplierService {
 	SupplierRepository supplierRepository;
 
 	@Override
-	public List<Supplier> retrieveAllSuppliers() {
-		return supplierRepository.findAll();
-	}
-
-
-	@Override
-	public Supplier addSupplier(Supplier supplier) {
-		return supplierRepository.save(supplier);
+	public List<SupplierDTO> retrieveAllSuppliers() {
+		return supplierRepository.findAll().stream()
+				.map(this::mapToDTO)
+				.collect(Collectors.toList());
 	}
 
 	@Override
-	public Supplier updateSupplier(Supplier supplier) {
-		return  supplierRepository.save(supplier);
+	public SupplierDTO addSupplier(SupplierDTO supplierDTO) {
+		Supplier supplier = mapToEntity(supplierDTO);
+		return mapToDTO(supplierRepository.save(supplier));
 	}
 
 	@Override
-	public void deleteSupplier(Long SupplierId) {
-		supplierRepository.deleteById(SupplierId);
-
+	public SupplierDTO updateSupplier(SupplierDTO supplierDTO) {
+		Supplier supplier = mapToEntity(supplierDTO);
+		return mapToDTO(supplierRepository.save(supplier));
 	}
 
 	@Override
-	public Supplier retrieveSupplier(Long supplierId) {
-
-		return supplierRepository.findById(supplierId).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + supplierId));
+	public void deleteSupplier(Long supplierId) {
+		supplierRepository.deleteById(supplierId);
 	}
 
+	@Override
+	public SupplierDTO retrieveSupplier(Long supplierId) {
+		Supplier supplier = supplierRepository.findById(supplierId)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid supplier Id:" + supplierId));
+		return mapToDTO(supplier);
+	}
 
+	// Mapping Methods
+	private SupplierDTO mapToDTO(Supplier supplier) {
+		return new SupplierDTO(
+				supplier.getIdSupplier(),
+				supplier.getCode(),
+				supplier.getLabel(),
+				supplier.getSupplierCategory().toString()
+		);
+	}
+
+	private Supplier mapToEntity(SupplierDTO dto) {
+		Supplier supplier = new Supplier();
+		supplier.setIdSupplier(dto.getIdSupplier());
+		supplier.setCode(dto.getCode());
+		supplier.setLabel(dto.getLabel());
+		supplier.setSupplierCategory(SupplierCategory.valueOf(dto.getSupplierCategory()));
+		return supplier;
+	}
 }

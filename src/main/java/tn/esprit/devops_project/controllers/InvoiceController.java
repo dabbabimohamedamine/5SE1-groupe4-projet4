@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import tn.esprit.devops_project.entities.Invoice;
 import tn.esprit.devops_project.services.Iservices.IInvoiceService;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,11 @@ public class InvoiceController {
     @GetMapping("/invoice")
     public List<Invoice> getInvoices() {
        return invoiceService.retrieveAllInvoices();
+    }
+
+    @PostMapping("/invoice")
+    public Invoice addInvoice(@PathVariable Invoice invoice) {
+        return invoiceService.addInvoice(invoice);
     }
 
     @GetMapping("/invoice/{invoiceId}")
@@ -41,7 +47,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/invoice/price/{startDate}/{endDate}")
-    public float getTotalAmountInvoiceBetweenDates(@PathVariable Date startDate,@PathVariable Date endDate){
+    public float getTotalAmountInvoiceBetweenDates(@PathVariable LocalDate startDate, @PathVariable LocalDate endDate){
         return invoiceService.getTotalAmountInvoiceBetweenDates(startDate, endDate);
     }
 

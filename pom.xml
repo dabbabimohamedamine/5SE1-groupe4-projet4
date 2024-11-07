@@ -69,34 +69,7 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <repositoryId>deploymentRepo</repositoryId>
-                    <url>http://localhost:8081/repository/maven-releases/</url>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>deploymentRepo</id>
-            <url>http://localhost:8081/repository/maven-Releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>deploymentRepo</id>
-            <url>http://localhost:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
 <!-- test1  -->

@@ -15,7 +15,7 @@ services:
     devops-back:
       depends_on:
         - mysqldb
-      image: aniskh643/devops_project:1.0.0
+      image: aniskh643/anis-5se1-g4-projet4:anis
       # Uncomment if you need to build locally instead of using the image
       # build: ./
       restart: on-failure

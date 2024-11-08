@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import tn.esprit.devops_project.entities.Operator;
 
 public interface OperatorRepository extends CrudRepository<Operator, Long> {
-
+    boolean existsByEmail(String email);
 }

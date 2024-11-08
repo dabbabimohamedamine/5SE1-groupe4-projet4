@@ -20,12 +20,45 @@ public class ProductServiceImpl implements IProductService {
    final ProductRepository productRepository;
    final StockRepository stockRepository;
 
+
     @Override
     public Product addProduct(Product product, Long idStock) {
-        Stock stock = stockRepository.findById(idStock).orElseThrow(() -> new NullPointerException("stock not found"));
+        log.info("Attempting to add a new product: {}", product);
+
+        if (product.getPrice() <= 0) {
+            log.error("Product price must be greater than zero. Provided price: {}", product.getPrice());
+            throw new IllegalArgumentException("Product price must be greater than zero");
+        }
+        if (product.getQuantity() < 0) {
+            log.error("Product quantity cannot be negative. Provided quantity: {}", product.getQuantity());
+            throw new IllegalArgumentException("Product quantity cannot be negative");
+        }
+
+        List<Product> existingProducts = productRepository.findByTitleAndCategoryAndStockIdStock(product.getTitle(), product.getCategory(), idStock);
+        if (!existingProducts.isEmpty()) {
+            log.warn("A similar product already exists in stock. Duplicate not allowed for title: {} in category: {}", product.getTitle(), product.getCategory());
+            throw new IllegalArgumentException("A product with the same title and category already exists in this stock");
+        }
+
+        Stock stock = stockRepository.findById(idStock)
+                .orElseThrow(() -> new NullPointerException("Stock not found with ID: " + idStock));
         product.setStock(stock);
-        return productRepository.save(product);
+
+        if (product.getCategory() == ProductCategory.RESTRICTED && stock.isSensitive()) {
+            log.error("Cannot add restricted products to sensitive stock locations");
+            throw new IllegalArgumentException("Restricted products cannot be added to sensitive stock locations");
+        }
+
+        if (product.getQuantity() < 10) {
+            log.warn("Product quantity is low ({} units). Consider ordering more stock.", product.getQuantity());
+        }
+
+        Product savedProduct = productRepository.save(product);
+        log.info("Successfully added product with ID: {} to stock with ID: {}", savedProduct.getIdProduct(), idStock);
+
+        return savedProduct;
     }
+
 
     @Override
     public Product retrieveProduct(Long id) {

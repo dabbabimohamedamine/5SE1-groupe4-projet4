@@ -12,7 +12,7 @@
       volumes:
         - db:/var/lib/mysql
 
-    app-station-ski:
+    devops-back:
       depends_on:
         - mysqldb
       image: aniskh643/devops_project:1.0.0

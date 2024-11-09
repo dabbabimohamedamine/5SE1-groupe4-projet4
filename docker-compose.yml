@@ -44,7 +44,7 @@ services:
         image: sonarqube:latest
         restart: unless-stopped
         ports:
-          - 9001:9000
+          - 9002:9000
         environment:
           - SONAR_JDBC_URL=jdbc:mysql://mysqldb:3306/db
           - SONAR_JDBC_USERNAME=root

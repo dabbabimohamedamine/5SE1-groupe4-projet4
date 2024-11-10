@@ -13,4 +13,5 @@ public interface ISupplierService {
 	void deleteSupplier(Long supplierId);
 	SupplierDTO retrieveSupplier(Long supplierId);
 
+	SupplierDTO addAdvancedSupplier(SupplierDTO supplierDTO);
 }

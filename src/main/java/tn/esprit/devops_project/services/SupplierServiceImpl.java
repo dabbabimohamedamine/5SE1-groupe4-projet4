@@ -68,4 +68,19 @@ public class SupplierServiceImpl implements ISupplierService {
 		supplier.setSupplierCategory(SupplierCategory.valueOf(dto.getSupplierCategory()));
 		return supplier;
 	}
+
+	@Override
+	public SupplierDTO addAdvancedSupplier(SupplierDTO supplierDTO) {
+		if (supplierDTO.getCode() == null || supplierDTO.getCode().isEmpty()) {
+			throw new IllegalArgumentException("Le code du fournisseur ne peut pas être vide");
+		}
+
+		if (supplierRepository.existsByCode(supplierDTO.getCode())) {
+			throw new IllegalArgumentException("Le code du fournisseur doit être unique");
+		}
+
+		Supplier supplier = mapToEntity(supplierDTO);
+		return mapToDTO(supplierRepository.save(supplier));
+	}
+
 }

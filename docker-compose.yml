@@ -15,7 +15,7 @@ services:
   devops-back:
     depends_on:
       - mysqldb
-    image: oudaybenmessaoud/spring:latest
+    image: oudaybenmessaoud/ouday-5se1-g4-projet4:null
     restart: on-failure
     ports:
       - 8082:8082

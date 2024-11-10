@@ -23,7 +23,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Invoice implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+/*ecec*/
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long idInvoice;

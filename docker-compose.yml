@@ -5,8 +5,8 @@ services:
     image: mysql:8.0.3
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_DATABASE=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=YES
+      - MYSQL_DATABASE=db
     ports:
       - 3306:3306
     volumes:

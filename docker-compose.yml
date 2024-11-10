@@ -39,19 +39,19 @@ services:
       - nexus-data:/nexus-data
 
   sonarqube:
-      image: sonarqube:latest
-      restart: unless-stopped
-      ports:
-        - 9001:9000
-      environment:
-        - SONAR_JDBC_URL=jdbc:mysql://mysqldb:3306/db
-        - SONAR_JDBC_USERNAME=root
-        - SONAR_JDBC_PASSWORD=
-      volumes:
-        - sonarqube_data:/opt/sonarqube/data
-        - sonarqube_logs:/opt/sonarqube/logs
-        - sonarqube_extensions:/opt/sonarqube/extensions
-        - /opt/sonarqube/extensions/jdbc-driver:/opt/sonarqube/extensions/jdbc-driver
+    image: sonarqube:latest
+    restart: unless-stopped
+    ports:
+      - 9001:9000
+    environment:
+      - SONAR_JDBC_URL=jdbc:mysql://mysqldb:3306/db
+      - SONAR_JDBC_USERNAME=root
+      - SONAR_JDBC_PASSWORD=
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - /home/ubuntu/sonar-jdbc-driver/mysql:/opt/sonarqube/extensions/jdbc-driver
 
 volumes:
   db:
@@ -59,4 +59,3 @@ volumes:
   sonarqube_data:
   sonarqube_logs:
   sonarqube_extensions:
-  /opt/sonarqube/extensions/jdbc-driver:

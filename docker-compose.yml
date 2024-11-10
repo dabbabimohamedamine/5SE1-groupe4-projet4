@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   mysqldb:
     image: mysql:8.0.30
@@ -49,7 +51,6 @@ services:
         - sonarqube_data:/opt/sonarqube/data
         - sonarqube_logs:/opt/sonarqube/logs
         - sonarqube_extensions:/opt/sonarqube/extensions
-        - /home/ubuntu/sonar-jdbc-driver/mysql/mysql-connector-java-8.0.30.jar:/opt/sonarqube/extensions/jdbc-driver/mysql-connector-java-8.0.30.jar
 
 volumes:
   db:

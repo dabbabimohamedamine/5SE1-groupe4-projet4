@@ -16,7 +16,8 @@ services:
   devops-back:
     depends_on:
       - mysqldb
-    image: oudaybenmessaoud/devops-back:latest  # Remplacez par le nom de votre image Docker Hub
+    image: oudaybenmessaoud/ouday-5se1-g4-projet4:latest
+    # Remplacez par le nom de votre image Docker Hub
     restart: on-failure
     ports:
       - 8089:8089

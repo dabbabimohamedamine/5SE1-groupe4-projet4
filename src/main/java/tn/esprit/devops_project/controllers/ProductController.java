@@ -19,10 +19,7 @@ public class ProductController {
     Product addProduct(@RequestBody Product product,@PathVariable Long idStock){
         return productService.addProduct(product,idStock);
     }
-    @PostMapping("/products")
-    public Product addProduct(@RequestBody Product product) {
-        return productService.addProduct(product, product.getStock().getIdStock());
-    }
+
 
 
     @GetMapping("/product/{id}")

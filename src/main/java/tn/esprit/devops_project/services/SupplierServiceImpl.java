@@ -26,11 +26,11 @@ public class SupplierServiceImpl implements ISupplierService {
 				.collect(Collectors.toList());
 	}
 
-	@Override
-	public SupplierDTO addSupplier(SupplierDTO supplierDTO) {
-		Supplier supplier = mapToEntity(supplierDTO);
-		return mapToDTO(supplierRepository.save(supplier));
-	}
+		@Override
+		public SupplierDTO addSupplier(SupplierDTO supplierDTO) {
+			Supplier supplier = mapToEntity(supplierDTO);
+			return mapToDTO(supplierRepository.save(supplier));
+		}
 
 	@Override
 	public SupplierDTO updateSupplier(SupplierDTO supplierDTO) {

@@ -4,8 +4,8 @@ services:
     image: mysql:8.0.3  # Utilise MySQL version 8.0.3
     restart: unless-stopped  # Redémarre automatiquement sauf si arrêté manuellement
     environment:
-      MYSQL_ROOT_PASSWORD: "ouday"  # Remplacez par votre mot de passe root
-      MYSQL_DATABASE: devoouyjngnjgngte  # Le nom de la base de données à créer
+      MYSQL_ROOT_PASSWORD: "ouday"  # Mot de passe root
+      MYSQL_DATABASE: devoouyjngnjgngte  # Le nom de la base de données
     ports:
       - "3306:3306"  # Expose le port 3306 pour l'accès à MySQL
     volumes:
@@ -14,7 +14,7 @@ services:
   devocs-back:
     depends_on:
       - mysqldb  # Assure que MySQL est démarré avant l'application Spring Boot
-    image: oudaybenmessaoud/ouday-5se1-g4-projet4:null  # Image Docker de votre application Spring Boot
+    image: oudaybenmessaoud/ouday-5se1-g4-projet4:latest  # Image Docker de votre application Spring Boot
     restart: on-failure  # Redémarre l'application en cas d'échec
     ports:
       - "8082:8082"  # Expose le port 8082 pour l'application Spring Boot
@@ -37,4 +37,3 @@ services:
 
 volumes:
   db:
-    driver: local  # Volume local pour stocker les données de la base de données MySQL

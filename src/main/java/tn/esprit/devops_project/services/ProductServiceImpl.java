@@ -9,6 +9,8 @@ import tn.esprit.devops_project.entities.ProductCategory;
 import tn.esprit.devops_project.entities.Stock;
 import tn.esprit.devops_project.repositories.ProductRepository;
 import tn.esprit.devops_project.repositories.StockRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -17,48 +19,56 @@ import java.util.List;
 @Slf4j
 public class ProductServiceImpl implements IProductService {
 
-   final ProductRepository productRepository;
-   final StockRepository stockRepository;
-
+    final ProductRepository productRepository;
+    final StockRepository stockRepository;
 
     @Override
     public Product addProduct(Product product, Long idStock) {
-        log.info("Attempting to add a new product: {}", product);
+        Logger logger = LoggerFactory.getLogger(this.getClass());
 
-        if (product.getPrice() <= 0) {
-            log.error("Product price must be greater than zero. Provided price: {}", product.getPrice());
-            throw new IllegalArgumentException("Product price must be greater than zero");
-        }
-        if (product.getQuantity() < 0) {
-            log.error("Product quantity cannot be negative. Provided quantity: {}", product.getQuantity());
-            throw new IllegalArgumentException("Product quantity cannot be negative");
-        }
-
-        List<Product> existingProducts = productRepository.findByTitleAndCategoryAndStockIdStock(product.getTitle(), product.getCategory(), idStock);
-        if (!existingProducts.isEmpty()) {
-            log.warn("A similar product already exists in stock. Duplicate not allowed for title: {} in category: {}", product.getTitle(), product.getCategory());
-            throw new IllegalArgumentException("A product with the same title and category already exists in this stock");
-        }
-
+        // Retrieve the stock by ID or throw an exception if not found
         Stock stock = stockRepository.findById(idStock)
                 .orElseThrow(() -> new NullPointerException("Stock not found with ID: " + idStock));
+
+        logger.info("Adding product to stock with ID: {}", idStock);
+
+        // Input Validation
+        if (product.getTitle() == null || product.getTitle().isEmpty()) {
+            product.setTitle("Untitled Product");
+            logger.warn("Product title is empty. Setting default title: 'Untitled Product'");
+        }
+
+        if (product.getPrice() == 0) {
+            product.setPrice(10.0f); // Set default price if invalid
+            logger.warn("Product price is invalid 😊 0). Setting default price: 10.0");
+        }
+
+        if (product.getQuantity() < 0) {
+            product.setQuantity(0); // Set default quantity if invalid
+            logger.warn("Product quantity is negative. Setting default quantity: 0");
+        }
+
+        // Auto-assign category based on the product title
+        if (product.getCategory() == null) {
+            if (product.getTitle().toLowerCase().contains("book")) {
+                product.setCategory(ProductCategory.BOOKS);
+                logger.info("Auto-assigning category to 'BOOKS' based on title content.");
+            } else if (product.getTitle().toLowerCase().contains("electronics")) {
+                product.setCategory(ProductCategory.ELECTRONICS);
+                logger.info("Auto-assigning category to 'ELECTRONICS' based on title content.");
+            } else {
+                product.setCategory(ProductCategory.CLOTHING);
+                logger.info("Auto-assigning category to 'OTHER' as no specific match found.");
+            }
+        }
+
+        // Link product to stock and save it
         product.setStock(stock);
-
-        if (product.getCategory() == ProductCategory.RESTRICTED && stock.isSensitive()) {
-            log.error("Cannot add restricted products to sensitive stock locations");
-            throw new IllegalArgumentException("Restricted products cannot be added to sensitive stock locations");
-        }
-
-        if (product.getQuantity() < 10) {
-            log.warn("Product quantity is low ({} units). Consider ordering more stock.", product.getQuantity());
-        }
-
         Product savedProduct = productRepository.save(product);
-        log.info("Successfully added product with ID: {} to stock with ID: {}", savedProduct.getIdProduct(), idStock);
 
+        logger.info("Product added successfully with ID: {}", savedProduct.getIdProduct());
         return savedProduct;
     }
-
 
     @Override
     public Product retrieveProduct(Long id) {

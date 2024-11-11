@@ -25,5 +25,4 @@ public class Product implements Serializable {
     @ManyToOne
     @JsonIgnore
     Stock stock;
-    //nexus
 }

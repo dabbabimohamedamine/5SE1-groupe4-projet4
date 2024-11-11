@@ -2,42 +2,40 @@ version: "3.8"
 
 services:
   mysqldb:
-    image: mysql:8.0.3
-    restart: unless-stopped
+    image: mysql:8.0.3  # Utilisation de MySQL version 8.0.3
+    restart: unless-stopped  # Redémarre automatiquement sauf si arrêté manuellement
     environment:
-      - MYSQL_ROOT_PASSWORD:Admin
-      - MYSQL_DATABASE:db
+      MYSQL_ROOT_PASSWORD: ""  # Mot de passe root vide, à ajuster selon votre besoin
+      MYSQL_DATABASE: devoouyjngnjgngte  # Nom de la base de données à créer
     ports:
-      - 3306:3306
+      - 3306:3306  # Expose le port 3306 pour l'accès à MySQL
     volumes:
-      - db:/var/lib/mysql
+      - db:/var/lib/mysql  # Persistance des données dans un volume Docker
 
-  devops-back:
+  app-tpFoyer:
     depends_on:
-      - mysqldb
-    image: oudaybenmessaoud/ouday-5se1-g4-projet4:latest
-    # Uncomment if you need to build locally instead of using the image
-    # build: ./
-    restart: on-failure
+      - mysqldb  # Assure que MySQL est démarré avant l'application Spring Boot
+    image: oudaybenmessaoud/ouday-5se1-g4-projet4:latest  # Votre image Docker de l'application Spring Boot
+    restart: on-failure  # Redémarre l'application en cas d'échec
     ports:
-      - 8082:8082
+      - 8082:8082  # Expose le port 8082 pour l'application Spring Boot
     environment:
       SPRING_APPLICATION_JSON: '{
-             "spring.datasource.url": "jdbc:mysql://mysqldb:3306/db?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
-             "spring.datasource.username": "root",
-             "spring.datasource.password": "Admin",
-             "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQLDialect",
-             "spring.jpa.hibernate.ddl-auto": "update",
-             "spring.datasource.driver-class-name": "com.mysql.cj.jdbc.Driver",
-             "spring.jpa.hibernate.ddl-auto": "update",
-             "spring.datasource.initialization-mode": "always",
-             "spring.datasource.platform": "mysql"
-           }'
-    stdin_open: true
-    tty: true
-
+        "spring.datasource.url": "jdbc:mysql://mysqldb:3306/devoouyjngnjgngte?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+        "spring.datasource.username": "root",
+        "spring.datasource.password": "",
+        "spring.datasource.driver-class-name": "com.mysql.cj.jdbc.Driver",
+        "spring.jpa.show-sql": "true",
+        "spring.jpa.hibernate.ddl-auto": "update",
+        "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL8Dialect",
+        "spring.jpa.properties.hibernate.dialect.storage_engine": "MyISAM",
+        "spring.jpa.properties.hibernate.format_sql": "true",
+        "spring.jpa.properties.hibernate.use_sql_comments": "true",
+        "spring.sql.init.mode": "always"
+      }'  # Configuration Spring Boot pour se connecter à MySQL
+    stdin_open: true  # Permet l'interaction avec le conteneur via stdin
+    tty: true  # Permet d'allouer un terminal pour l'interaction avec le conteneur
 
 volumes:
   db:
-    driver: local
-
+    driver: local  # Volume local pour stocker les données de la base de données MySQL

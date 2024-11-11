@@ -13,7 +13,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ouday:/var/lib/mysql
+      - db:/var/lib/mysql
 
   devops-back:
     depends_on:

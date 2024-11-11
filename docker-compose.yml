@@ -3,7 +3,7 @@ version: "3.8"
 services:
   mysqldb:
     image: mysql:8.1.1
-    container_name: ouday
+    container_name: mysqldb
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -13,7 +13,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - mysqldb:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
 
   devops-back:
     depends_on:

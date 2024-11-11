@@ -10,5 +10,5 @@ public class SupplierDTO {
     private Long idSupplier;
     private String code;
     private String label;
-    private String supplierCategory;
+    private SupplierCategory supplierCategory;
 }

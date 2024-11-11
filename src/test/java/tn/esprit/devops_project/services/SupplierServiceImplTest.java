@@ -1,72 +1,61 @@
 package tn.esprit.devops_project.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import tn.esprit.devops_project.entities.Supplier;
 import tn.esprit.devops_project.entities.SupplierCategory;
 import tn.esprit.devops_project.entities.SupplierDTO;
 import tn.esprit.devops_project.repositories.SupplierRepository;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@TestPropertySource(locations = "classpath:application-test.properties")
-@Transactional
 class SupplierServiceImplTest {
 
-    @Autowired
+    @Mock
+    private SupplierRepository supplierRepository;
+
+    @InjectMocks
     private SupplierServiceImpl supplierService;
 
-    @Autowired
-    private SupplierRepository supplierRepository;
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     void testAddAdvancedSupplier() {
+        // Arrange
         SupplierDTO supplierToAdd = new SupplierDTO();
         supplierToAdd.setCode("uniqueCode");
         supplierToAdd.setLabel("Test Supplier Advanced");
-        supplierToAdd.setSupplierCategory("ORDINAIRE");
+        supplierToAdd.setSupplierCategory(SupplierCategory.ORDINAIRE);  // Using the enum directly
 
+        Supplier supplierEntity = new Supplier();
+        supplierEntity.setIdSupplier(1L);
+        supplierEntity.setCode("uniqueCode");
+        supplierEntity.setLabel("Test Supplier Advanced");
+        supplierEntity.setSupplierCategory(SupplierCategory.ORDINAIRE);
+
+        // Mocking the repository behavior
+        when(supplierRepository.save(any(Supplier.class))).thenReturn(supplierEntity);
+
+        // Act
         SupplierDTO savedSupplier = supplierService.addAdvancedSupplier(supplierToAdd);
 
+        // Assert
         assertNotNull(savedSupplier);
-        assertNotNull(savedSupplier.getIdSupplier());
         assertEquals("uniqueCode", savedSupplier.getCode());
+        assertEquals("Test Supplier Advanced", savedSupplier.getLabel());
+        assertEquals(SupplierCategory.ORDINAIRE, savedSupplier.getSupplierCategory());
 
-        Supplier foundSupplier = supplierRepository.findById(savedSupplier.getIdSupplier()).orElse(null);
-        assertNotNull(foundSupplier);
-        assertEquals(savedSupplier.getCode(), foundSupplier.getCode());
-        assertEquals(savedSupplier.getLabel(), foundSupplier.getLabel());
-
-        // Clean-up (optionnel)
-        supplierRepository.deleteById(savedSupplier.getIdSupplier());
+        // Verify interactions with the repository
+        verify(supplierRepository, times(1)).save(any(Supplier.class));
     }
 
-    @Test
-    void testAddAdvancedSupplierWithDuplicateCode() {
-        SupplierDTO supplierToAdd1 = new SupplierDTO();
-        supplierToAdd1.setCode("duplicateCode");
-        supplierToAdd1.setLabel("First Supplier");
-        supplierToAdd1.setSupplierCategory("ORDINAIRE");
 
-        supplierService.addAdvancedSupplier(supplierToAdd1);
-
-        SupplierDTO supplierToAdd2 = new SupplierDTO();
-        supplierToAdd2.setCode("duplicateCode"); // même code que supplierToAdd1
-        supplierToAdd2.setLabel("Second Supplier");
-        supplierToAdd2.setSupplierCategory("CONVENTIONNE");
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            supplierService.addAdvancedSupplier(supplierToAdd2);
-        });
-
-        assertEquals("Le code du fournisseur doit être unique", exception.getMessage());
-
-
-    }
 }

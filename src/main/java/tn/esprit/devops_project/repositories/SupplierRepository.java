@@ -5,4 +5,5 @@ import tn.esprit.devops_project.entities.Supplier;
 
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     boolean existsByCode(String code);
+    Supplier findByCode(String code);
 }

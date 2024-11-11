@@ -18,7 +18,7 @@ services:
     image: oudaybenmessaoud/ouday-5se1-g4-projet4:latest
     restart: on-failure
     ports:
-      - 8080:8080
+      - 8089:8089
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.datasource.url"  : "jdbc:mysql://mysqldb:3306/devoo?createDatabaseIfNotExist=true",

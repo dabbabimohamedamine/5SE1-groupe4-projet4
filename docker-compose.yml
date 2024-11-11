@@ -1,26 +1,24 @@
-version: '3.8'
+version: "3.8"
 
 services:
   mysqldb:
-    image: mysql:8.0.3
-    restart: unless-stopped
+    image: mysql:8.0.3  # Utilisation de MySQL version 8.0.3
+    restart: unless-stopped  # Redémarre automatiquement sauf si arrêté manuellement
     environment:
-      MYSQL_ROOT_PASSWORD: ""
-      MYSQL_DATABASE: devoouyjngnjgngte
+      MYSQL_ROOT_PASSWORD: ""  # Mot de passe root vide, à ajuster selon votre besoin
+      MYSQL_DATABASE: devoouyjngnjgngte  # Nom de la base de données à créer
     ports:
-      - "3306:3306"
-    networks:
-      - devops_network
+      - 3306:3306  # Expose le port 3306 pour l'accès à MySQL
     volumes:
-      - mysqldb_data:/var/lib/mysql
+      - db:/var/lib/mysql  # Persistance des données dans un volume Docker
 
   devocs-back:
     depends_on:
-      - mysqldb
-    image: oudaybenmessaoud/ouday-5se1-g4-projet4:null
-    restart: on-failure
+      - mysqldb  # Assure que MySQL est démarré avant l'application Spring Boot
+    image: oudaybenmessaoud/ouday-5se1-g4-projet4:null  # Votre image Docker de l'application Spring Boot
+    restart: on-failure  # Redémarre l'application en cas d'échec
     ports:
-      - "8082:8082"
+      - 8082:8082  # Expose le port 8082 pour l'application Spring Boot
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.datasource.url": "jdbc:mysql://mysqldb:3306/devoouyjngnjgngte?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
@@ -34,16 +32,10 @@ services:
         "spring.jpa.properties.hibernate.format_sql": "true",
         "spring.jpa.properties.hibernate.use_sql_comments": "true",
         "spring.sql.init.mode": "always"
-      }'
-    networks:
-      - devops_network
-    stdin_open: true
-    tty: true
-
-networks:
-  devops_network:
-    driver: bridge
+      }'  # Configuration Spring Boot pour se connecter à MySQL
+    stdin_open: true  # Permet l'interaction avec le conteneur via stdin
+    tty: true  # Permet d'allouer un terminal pour l'interaction avec le conteneur
 
 volumes:
-  mysqldb_data:
-    driver: local
+  db:
+    driver: local  # Volume local pour stocker les données de la base de données MySQL

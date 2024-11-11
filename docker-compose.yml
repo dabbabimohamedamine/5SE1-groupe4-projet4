@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   mysqldb:
-    image: mysql:8.0
+    image: mysql:8.0.30
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root_password
@@ -16,7 +16,7 @@ services:
   devops-back:
     depends_on:
       - mysqldb
-    image: oudaybenmessaoud/ouday-5se1-g4-projet4:latest
+    image: oudaybenmessaoud/devops-back:latest  # Remplacez par le nom de votre image Docker Hub
     restart: on-failure
     ports:
       - 8089:8089

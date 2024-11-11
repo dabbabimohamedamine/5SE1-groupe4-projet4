@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SupplierServiceImpl implements ISupplierService {
 
-	private final SupplierRepository supplierRepository;
+	SupplierRepository supplierRepository;
 
 	@Override
 	public List<SupplierDTO> retrieveAllSuppliers() {
@@ -46,64 +46,41 @@ public class SupplierServiceImpl implements ISupplierService {
 	@Override
 	public SupplierDTO retrieveSupplier(Long supplierId) {
 		Supplier supplier = supplierRepository.findById(supplierId)
-				.orElseThrow(() -> new IllegalArgumentException("Supplier with ID " + supplierId + " not found."));
+				.orElseThrow(() -> new IllegalArgumentException("Invalid supplier Id:" + supplierId));
 		return mapToDTO(supplier);
 	}
 
 	// Mapping Methods
 	private SupplierDTO mapToDTO(Supplier supplier) {
-		if (supplier == null) {
-			return null; // Return null if the entity is null
-		}
-		SupplierDTO supplierDTO = new SupplierDTO();
-		supplierDTO.setCode(supplier.getCode());
-		supplierDTO.setLabel(supplier.getLabel());
-		supplierDTO.setSupplierCategory(supplier.getSupplierCategory());
-		return supplierDTO;
+		return new SupplierDTO(
+				supplier.getIdSupplier(),
+				supplier.getCode(),
+				supplier.getLabel(),
+				supplier.getSupplierCategory().toString()
+		);
 	}
 
-
-	private Supplier mapToEntity(SupplierDTO supplierDTO) {
-		if (supplierDTO == null) {
-			return null; // Return null if the DTO is null
-		}
+	private Supplier mapToEntity(SupplierDTO dto) {
 		Supplier supplier = new Supplier();
-		supplier.setCode(supplierDTO.getCode());
-		supplier.setLabel(supplierDTO.getLabel());
-		supplier.setSupplierCategory(SupplierCategory.valueOf(String.valueOf(supplierDTO.getSupplierCategory()))); // Ensure SupplierCategory is valid
+		supplier.setIdSupplier(dto.getIdSupplier());
+		supplier.setCode(dto.getCode());
+		supplier.setLabel(dto.getLabel());
+		supplier.setSupplierCategory(SupplierCategory.valueOf(dto.getSupplierCategory()));
 		return supplier;
 	}
 
 	@Override
 	public SupplierDTO addAdvancedSupplier(SupplierDTO supplierDTO) {
-		// Ensure that the supplier code is not null or empty
 		if (supplierDTO.getCode() == null || supplierDTO.getCode().isEmpty()) {
 			throw new IllegalArgumentException("Le code du fournisseur ne peut pas être vide");
 		}
 
-		// Check if a supplier with the same code already exists
 		if (supplierRepository.existsByCode(supplierDTO.getCode())) {
 			throw new IllegalArgumentException("Le code du fournisseur doit être unique");
 		}
 
-		// Convert DTO to Entity
 		Supplier supplier = mapToEntity(supplierDTO);
-
-		// Null check for supplier entity after conversion
-		if (supplier == null) {
-			throw new IllegalArgumentException("Supplier entity could not be created from DTO.");
-		}
-
-		// Save the supplier and handle any possible issues with saving
-		Supplier savedSupplier = supplierRepository.save(supplier);
-
-		// Null check after saving the supplier to the repository
-		if (savedSupplier == null) {
-			throw new IllegalStateException("Failed to save supplier to the repository.");
-		}
-
-		// Convert the saved entity back to DTO and return it
-		return mapToDTO(savedSupplier);
+		return mapToDTO(supplierRepository.save(supplier));
 	}
 
 }

@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.Column;
+
 @Entity
 @Getter
 @Setter
@@ -21,8 +23,10 @@ public class Stock implements Serializable {
 
     String title;
 
-    boolean sensitive; // Lombok will generate getter and setter
+    @Column(name = "`sensitive`")  // Enclose in backticks
+    boolean sensitive;
 
     @OneToMany(mappedBy = "stock")
     Set<Product> products;
 }
+

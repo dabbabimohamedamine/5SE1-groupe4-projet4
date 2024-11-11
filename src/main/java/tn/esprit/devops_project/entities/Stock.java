@@ -21,18 +21,8 @@ public class Stock implements Serializable {
 
     String title;
 
-    private boolean sensitive; // Sensitive flag
+    boolean sensitive; // Lombok will generate getter and setter
 
     @OneToMany(mappedBy = "stock")
     Set<Product> products;
-
-    // Getter and setter for sensitive
-    public boolean isSensitive() {
-        return sensitive;
-    }
-
-    public void setSensitive(boolean sensitive) {
-        this.sensitive = sensitive;
-    }
-
 }

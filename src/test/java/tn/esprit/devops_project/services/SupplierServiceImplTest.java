@@ -42,7 +42,6 @@ class SupplierServiceImplTest {
         assertEquals(savedSupplier.getCode(), foundSupplier.getCode());
         assertEquals(savedSupplier.getLabel(), foundSupplier.getLabel());
 
-        // Clean-up (optionnel)
         supplierRepository.deleteById(savedSupplier.getIdSupplier());
     }
 

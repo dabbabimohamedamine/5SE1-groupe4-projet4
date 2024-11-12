@@ -9,7 +9,6 @@ import tn.esprit.devops_project.entities.Supplier;
 import tn.esprit.devops_project.entities.SupplierDTO;
 import tn.esprit.devops_project.repositories.SupplierRepository;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import tn.esprit.devops_project.repositories.SupplierRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

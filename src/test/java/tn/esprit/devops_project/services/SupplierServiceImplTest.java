@@ -62,7 +62,8 @@ class SupplierServiceImplTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             supplierService.addAdvancedSupplier(supplierToAdd2);
         });
-
+        // même code que supplierToAdd1
+        // même code que supplierToAdd1
         assertEquals("Le code du fournisseur doit être unique", exception.getMessage());
 
 

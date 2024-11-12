@@ -7,9 +7,9 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: root
+      MYSQL_DATABASE: ddddddddddddd
     networks:
-        - mynetwork
+      - mynetwork
     ports:
       - 3306:3306
     volumes:
@@ -23,13 +23,13 @@ services:
     # build: ./
     restart: on-failure
     ports:
-      - 7070:8089
+      - 7070:8082
     networks:
-          - mynetwork
+      - mynetwork
 
 volumes:
-  mysql_data :
-networks:
-      mynetwork:
-        driver: bridge
+  mysql_data:
 
+networks:
+  mynetwork:
+    driver: bridge

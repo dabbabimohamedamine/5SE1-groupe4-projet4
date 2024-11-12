@@ -1,31 +1,22 @@
 version: "3.8"
-
 services:
-  springboot-app:
-    container_name: spring-app
-    image: springboot-app
-    build:
-      context: . # Le dossier où ton Dockerfile est présent
-      dockerfile: Dockerfile
+  server:
+    build: .
     restart: always
     ports:
-      - "8082:8082"
-    environment:
-      MYSQL_HOST: mysqldb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_PORT: 3306
+      - "8700:8700"
     depends_on:
       - mysqldb
-
   mysqldb:
     container_name: mysqldb
     image: mysql:8.0.3
+    restart: always
     volumes:
       - /home/ubuntu/Desktop/db:/var/lib/mysql  # Stockage des données sur l'hôte
     ports:
       - "3307:3306"
     environment:
       MYSQL_DATABASE: sssss
-      MYSQL_ROOT_PASSWORD: root
-    restart: always
+      MYSQL_USER: ouday
+      MYSQL_PASSWORD: ouday
+      MYSQL_ROOT_PASSWORD: ouday

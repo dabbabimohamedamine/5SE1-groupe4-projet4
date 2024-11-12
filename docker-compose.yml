@@ -11,9 +11,9 @@ services:
       MYSQL_USER: ouday
       MYSQL_PASSWORD: ouday
     ports:
-      - "3307:3306"  # Expose MySQL on port 3307 of your machine
+      - "3307:3306"  # Expose MySQL sur le port 3307
     volumes:
-      - /home/ubuntu/Desktop/db:/var/lib/mysql  # Persist data to the host
+      - /home/ubuntu/Desktop/db:/var/lib/mysql  # Persiste les données sur l'hôte
     networks:
       - mynetworkouday
     healthcheck:
@@ -28,17 +28,25 @@ services:
     image: oudaybenmessaoud/ouday-5se1-g4-projet4:latest  # Image Spring Boot spécifique
     restart: always
     depends_on:
-      - mysqldb  # Assure que mysqldb soit démarré avant le Spring Boot
+      - mysqldb  # Assure que mysqldb soit démarré avant Spring Boot
     ports:
       - "8082:8082"  # Expose Spring Boot sur le port 8082
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/sssss?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/sssss?createDatabaseIfNotExist=true&useSSL=false&requireSSL=false
       SPRING_DATASOURCE_USERNAME: ouday
       SPRING_DATASOURCE_PASSWORD: ouday
       SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
     networks:
       - mynetworkouday
-    command: ["sh", "-c", "sleep 120 && java -jar /app.jar"]  # Sleep 120 secondes avant de démarrer Spring Boot
+    command: >
+      bash -c "
+        until mysql -h mysqldb -u ouday -pouday -e 'SELECT 1'; do
+          echo 'En attente de MySQL...';
+          sleep 5;
+        done;
+        echo 'MySQL est prêt. Démarrage de Spring Boot...';
+        java -jar /app.jar
+      "
 
 networks:
   mynetworkouday:

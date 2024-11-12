@@ -5,7 +5,7 @@ services:
     container_name: spring-app
     image: springboot-app
     build:
-      context: .  # Le dossier où ton Dockerfile est présent
+      context: . # Le dossier où ton Dockerfile est présent
       dockerfile: Dockerfile
     restart: always
     ports:

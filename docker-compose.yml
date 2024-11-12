@@ -13,23 +13,24 @@ services:
       SPRING_DATASOURCE_PASSWORD: ouday
       SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
     networks:
-      - mynetworkouday
+      - mynetworkouday  # Ajout du service dans le réseau personnalisé
 
   mysqldb:
     container_name: mysqldb
-    image: mysql:8.0.33  # Mise à jour vers la version 8.0.33
+    image: mysql:8.0.3  # Spécification de la version 8.0.3 de MySQL
     volumes:
-      - /home/ubuntu/Desktop/db:/var/lib/mysql
+      - /home/ubuntu/Desktop/db:/var/lib/mysql  # Stockage des données sur l'hôte
     ports:
-      - "3307:3306"
+      - "3307:3306"  # Port local 3307 vers port 3306 du conteneur
     environment:
       MYSQL_DATABASE: sssss
       MYSQL_USER: ouday
       MYSQL_PASSWORD: ouday
       MYSQL_ROOT_PASSWORD: ouday
     networks:
-      - mynetworkouday
+      - mynetworkouday  # Ajout du service dans le réseau personnalisé
 
+# Définition du réseau personnalisé
 networks:
   mynetworkouday:
-    driver: bridge
+    driver: bridge  # Utilisation du driver bridge (réseau par défaut dans Docker)

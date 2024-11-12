@@ -17,7 +17,7 @@ services:
 
   mysqldb:
     container_name: mysqldb
-    image: mysql:8.0.3
+    image: mysql:8.0.33  # Mise à jour vers la version 8.0.33
     volumes:
       - /home/ubuntu/Desktop/db:/var/lib/mysql
     ports:

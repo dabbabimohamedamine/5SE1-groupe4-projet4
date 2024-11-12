@@ -17,7 +17,7 @@
         <java.version>11</java.version>
         <sonar.projectKey>tn.esprit.ouday.devops_project</sonar.projectKey>
         <sonar.host.url>http://192.168.178.129:9000</sonar.host.url>
-        <sonar.login>2c988330f5c62b6f63ea135bedd2b39ac8041a6b</sonar.login>
+        <sonar.login>faac6c0de7a26cd17d1674dd2708389cc87b9db3</sonar.login>
     </properties>
     <dependencies>
         <dependency>

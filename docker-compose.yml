@@ -7,29 +7,27 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ddddddddddddd
+      MYSQL_DATABASE: ddddddddddddd  # Nom de la base de données
     networks:
       - mynetwork
     ports:
-      - 3306:3306
+      - 3306:3306  # Exposition du port MySQL
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql  # Persistance des données MySQL
 
   devops-back:
     depends_on:
-      - mysqldb
-    image: oudaybenmessaoud/ouday-5se1-g4-projet4:latest
-    # Uncomment if you need to build locally instead of using the image
-    # build: ./
+      - mysqldb  # Assure-toi que MySQL démarre avant l'application
+    image: oudaybenmessaoud/ouday-5se1-g4-projet4:latest  # Ton image Docker
     restart: on-failure
     ports:
-      - 7070:8082
+      - 7070:8082  # Associer le port de l'application à l'extérieur
     networks:
-      - mynetwork
+      - mynetwork  # Utilisation du même réseau Docker
 
 volumes:
-  mysql_data:
+  mysql_data:  # Volume Docker pour la persistance des données
 
 networks:
   mynetwork:
-    driver: bridge
+    driver: bridge  # Utilisation du réseau bridge pour la communication entre les conteneurs

@@ -9,6 +9,7 @@ import tn.esprit.devops_project.entities.Supplier;
 import tn.esprit.devops_project.entities.SupplierDTO;
 import tn.esprit.devops_project.repositories.SupplierRepository;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import tn.esprit.devops_project.repositories.SupplierRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -62,8 +63,7 @@ class SupplierServiceImplTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             supplierService.addAdvancedSupplier(supplierToAdd2);
         });
-        // même code que supplierToAdd1
-        // même code que supplierToAdd1
+
         assertEquals("Le code du fournisseur doit être unique", exception.getMessage());
 
 

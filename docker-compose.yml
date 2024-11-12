@@ -1,12 +1,36 @@
 version: "3.8"
+
 services:
-  server:
-    build: .
-    restart: always
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:8.0.3
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ouday
+      MYSQL_DATABASE: sssss
+      MYSQL_USER: ouday
+      MYSQL_PASSWORD: ouday
     ports:
-      - "8082:8082"
+      - "3307:3306"  # Expose MySQL on port 3307 of your machine
+    volumes:
+      - /home/ubuntu/Desktop/db:/var/lib/mysql  # Persist data to the host
+    networks:
+      - mynetworkouday
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--host=localhost", "--user=root", "--password=ouday"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+
+  server:
+    container_name: springboot
+    image: oudaybenmessaoud/ouday-5se1-g4-projet4:lateeee  # Image Spring Boot spécifique
+    restart: always
     depends_on:
-      - mysqldb
+      - mysqldb  # Assure que mysqldb soit démarré avant le Spring Boot
+    ports:
+      - "8082:8082"  # Expose Spring Boot sur le port 8082
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/sssss?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: ouday
@@ -14,30 +38,8 @@ services:
       SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
     networks:
       - mynetworkouday
-    command: ["sh", "-c", "sleep 60 && java -jar /app.jar"]  # Sleep 30 secondes avant de démarrer Spring Boot
+    command: ["sh", "-c", "sleep 120 && java -jar /app.jar"]  # Sleep 120 secondes avant de démarrer Spring Boot
 
-  mysqldb:
-    container_name: mysqldb
-    image: mysql:8.0.3
-    volumes:
-      - /home/ubuntu/Desktop/db:/var/lib/mysql  # Stockage des données sur l'hôte
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_DATABASE: sssss
-      MYSQL_USER: ouday
-      MYSQL_PASSWORD: ouday
-      MYSQL_ROOT_PASSWORD: ouday
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "--host=localhost", "--user=root", "--password=ouday"]
-      interval: 10s
-      retries: 5
-      start_period: 10s
-      timeout: 5s
-    networks:
-      - mynetworkouday
-
-# Définition du réseau personnalisé
 networks:
   mynetworkouday:
     driver: bridge

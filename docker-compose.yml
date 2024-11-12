@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   mysqldb:
-    image: mysql:8.1.1
+    image: mysql:8.0.3
     container_name: mysqldb
     restart: unless-stopped
     environment:

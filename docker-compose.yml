@@ -4,13 +4,18 @@ services:
     build: .
     restart: always
     ports:
-      - "8700:8700"
+      - "8082:8082"
     depends_on:
       - mysqldb
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/sssss?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: ouday
+      SPRING_DATASOURCE_PASSWORD: ouday
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
+
   mysqldb:
     container_name: mysqldb
     image: mysql:8.0.3
-    restart: always
     volumes:
       - /home/ubuntu/Desktop/db:/var/lib/mysql  # Stockage des données sur l'hôte
     ports:

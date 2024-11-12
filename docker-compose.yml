@@ -11,7 +11,7 @@ services:
       MYSQL_USER: ouday
       MYSQL_PASSWORD: ouday
     ports:
-      - "3306:3306"  # Expose MySQL sur le port 3307
+      - "3377:3306"  # Expose MySQL sur le port 3307
     volumes:
       - /home/ubuntu/Desktop/db:/var/lib/mysql  # Persiste les données sur l'hôte
     networks:

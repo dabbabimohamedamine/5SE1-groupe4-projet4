@@ -1,12 +1,14 @@
-# Étape 1: Utiliser une image Java officielle
-FROM openjdk:17-jdk-slim as builder
-
-# Ajouter le code source de l'application dans l'image
+# Étape 1: Utiliser l'image Maven pour la construction
+FROM maven:3.8.3-openjdk-17 AS build
 WORKDIR /app
-COPY ./target/springboot-app.jar springboot-app.jar
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Étape 2: Exposer le port de l'application
+# Étape 2: Utiliser l'image OpenJDK pour l'exécution
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8082
-
-# Exécuter l'application Spring Boot
-ENTRYPOINT ["java", "-jar", "springboot-app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

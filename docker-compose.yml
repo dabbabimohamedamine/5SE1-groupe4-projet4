@@ -25,7 +25,7 @@ services:
 
   server:
     container_name: springboot
-    image: oudaybenmessaoud/ouday-5se1-g4-projet4:lateeee  # Image Spring Boot spécifique
+    image: oudaybenmessaoud/ouday-5se1-g4-projet4:latest  # Image Spring Boot spécifique
     restart: always
     depends_on:
       - mysqldb  # Assure que mysqldb soit démarré avant le Spring Boot

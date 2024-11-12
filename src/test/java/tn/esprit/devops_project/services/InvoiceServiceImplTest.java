@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class InvoiceServiceImplTest {
+class InvoiceServiceImplTest {
 
     @InjectMocks
     private InvoiceServiceImpl invoiceService;
@@ -34,7 +34,7 @@ public class InvoiceServiceImplTest {
     }
 
     @Test
-    public void testGetTotalAmountInvoiceBetweenDates() {
+    void testGetTotalAmountInvoiceBetweenDates() {
         Date startDate = new Date(2023 - 1900, 9, 1); // Oct 1, 2023
         Date endDate = new Date(2023 - 1900, 9, 6); // Oct 6, 2023
 

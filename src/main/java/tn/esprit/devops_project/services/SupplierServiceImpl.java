@@ -34,8 +34,15 @@ public class SupplierServiceImpl implements ISupplierService {
 
 	@Override
 	public SupplierDTO updateSupplier(SupplierDTO supplierDTO) {
-		Supplier supplier = mapToEntity(supplierDTO);
-		return mapToDTO(supplierRepository.save(supplier));
+		Supplier existingSupplier = supplierRepository.findById(supplierDTO.getIdSupplier())
+				.orElseThrow(() -> new IllegalArgumentException("Supplier not found for update"));
+
+		// Update only relevant fields instead of overwriting with a new entity
+		existingSupplier.setCode(supplierDTO.getCode());
+		existingSupplier.setLabel(supplierDTO.getLabel());
+		existingSupplier.setSupplierCategory(SupplierCategory.valueOf(supplierDTO.getSupplierCategory()));
+
+		return mapToDTO(supplierRepository.save(existingSupplier));
 	}
 
 	@Override

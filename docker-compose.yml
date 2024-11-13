@@ -1,43 +1,41 @@
 version: "3.8"
-
 services:
+
+  # database application service
   mysqldb:
-    image: mysql:8.0.30
+    image: mysql:8.0.3
     restart: unless-stopped
-    environment:
-      - MYSQL_ROOT_PASSWORD=rootpassword
-      - MYSQL_DATABASE=testdb
     ports:
-      - "3306:3306"
+      - 3307:3306
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     volumes:
       - db:/var/lib/mysql
 
-  devops-back:
+    # backend application service
+  invoice-backend:
     depends_on:
       - mysqldb
     image: oudaybenmessaoud/ouday-5se1-g4-projet4:v10.0.0  # Remplacez par l'image correcte
+
+    build: ./
     restart: on-failure
     ports:
-      - "8089:8089"
-    environment:
-      SPRING_APPLICATION_JSON: >
-        {
-          "spring.datasource.url": "jdbc:mysql://mysqldb:3306/testdb?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
-          "spring.datasource.username": "root",
-          "spring.datasource.password": "rootpassword",
-          "spring.datasource.driver-class-name": "com.mysql.cj.jdbc.Driver",
-          "spring.jpa.database-platform": "org.hibernate.dialect.MySQL5InnoDBDialect",
-          "spring.jpa.hibernate.ddl-auto": "update",
-          "spring.jpa.show-sql": "true",
-          "spring.jpa.properties.hibernate.format_sql": "true",
-          "spring.h2.console.enabled": "false",
-          "spring.sql.init.mode": "always",
-          "server.port": "8089",
-          "spring.datasource.initialization-mode": "always",
-          "spring.datasource.platform": "mysql"
-        }
+      - 8087:8087
+
     stdin_open: true
     tty: true
+    environment:
+
+      SPRING APPLICATION_JSON: '{
+        "spring.datasource.url": "jdbc:mysql://mysqldb:3306/invoicedb?createDatabaseIfNotExist=true",
+        "spring.datasource.username": "root",
+        "spring.datasource.password": null,
+        "spring.jpa.properties.hibernate.dialect":"org.hibernate.dialect.MySQL8Dialect",
+        "spring.jpa.hibernate.ddl-auto": "update"
+      }'
+  # Frontend application service
+
 
 volumes:
-  db:
+  db :

@@ -57,19 +57,7 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    def imageTag = "${DOCKER_HUB_REPO}:${BRANCH_NAME}"
-                    def latestTag = "${DOCKER_HUB_REPO}:latest"
-                    echo "Building Docker image: ${imageTag}"
-                   
-                    // Build and tag both with branch name and "latest"
-                    sh "docker build -t ${imageTag} ."
-                    sh "docker tag ${imageTag} ${latestTag}"
-                }
-            }
-        }
+        stage('Build Docker Image') { steps { script { def imageTag = "${env.DOCKER_HUB_REPO}:latest" echo "Building Docker image: ${imageTag}" sh "docker build -t ${imageTag} ." } } }  
 
         stage('Push to DockerHub') {
             steps {

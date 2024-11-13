@@ -11,9 +11,9 @@ services:
       SPRING_DATASOURCE_PASSWORD: rootpassword
       SPRING_JPA_DATABASEPLATFORM: org.hibernate.dialect.MySQL5InnoDBDialect
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_JPA_SHOW_SQL: true
-      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: true
-      SPRING_H2_CONSOLE_ENABLED: false  # Désactive la console H2, car on utilise MySQL
+      SPRING_JPA_SHOW_SQL: "true"  # Valeur booléenne en chaîne de caractères
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"  # Valeur booléenne en chaîne de caractères
+      SPRING_H2_CONSOLE_ENABLED: "false"  # Valeur booléenne en chaîne de caractères
       SPRING_SQL_INIT_MODE: always  # Initialise la base de données à chaque démarrage
 
     depends_on:

@@ -7,6 +7,7 @@ pipeline {
         SONARQUBE_URL = 'http://192.168.17.128:9000'
         SONARQUBE_TOKEN = credentials('new-sonar-token')
         SONARQUBE_PROJECT_KEY = 'tn.esprit.amin.devops_project'
+
     }
 
     stages {
@@ -32,16 +33,16 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                echo 'Running SonarQube analysis...'
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar ' +
-                        '-Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} ' +
-                        '-Dsonar.host.url=${SONARQUBE_URL} ' +
-                        '-Dsonar.login=${SONARQUBE_TOKEN}'
+                    steps {
+                        echo 'Running SonarQube analysis...'
+                        withSonarQubeEnv('SonarQube') {
+                                            sh 'mvn sonar:sonar ' +
+                                                '-Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} ' +
+                                                '-Dsonar.host.url=${SONARQUBE_URL} ' +
+                                                '-Dsonar.login=${SONARQUBE_TOKEN}'
+                        }
+                    }
                 }
-            }
-        }
 
         stage('Build and Package') {
             steps {
@@ -50,36 +51,31 @@ pipeline {
             }
         }
 
-        stage('Deploy to Nexus') {
-            steps {
-                echo 'Deploying artifact to Nexus...'
-                sh 'mvn deploy -DskipTests=true -s /usr/share/maven/conf/settings.xml'
-            }
-        }
+         stage('Deploy to Nexus') {
+                    steps {
+                        echo 'Deploying artifact to Nexus...'
+                        sh 'mvn deploy -DskipTests=true -s /usr/share/maven/conf/settings.xml'
+                    }
+                }
 
-        stage('Build Docker Image') { steps { script { def imageTag = "${env.DOCKER_HUB_REPO}:latest" echo "Building Docker image: ${imageTag}" sh "docker build -t ${imageTag} ." } } }  
-
-        stage('Push to DockerHub') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    def imageTag = "${DOCKER_HUB_REPO}:${BRANCH_NAME}"
-                    def latestTag = "${DOCKER_HUB_REPO}:latest"
-                    echo "Pushing Docker images to DockerHub: ${imageTag} and ${latestTag}"
-                   
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_HUB_CREDENTIALS) {
-                        // Push both the branch-specific tag and the latest tag
-                        sh "docker push ${imageTag}"
-                        sh "docker push ${latestTag}"
-                    }
+                    def imageTag = "${env.DOCKER_HUB_REPO}:${env.BRANCH_NAME}"
+                    echo "Building Docker image: ${imageTag}"
+                    sh "docker build -t ${imageTag} ."
                 }
             }
         }
 
-        stage('Cleanup Old Images') {
+        stage('Push to DockerHub') {
             steps {
                 script {
-                    // Remove all untagged (dangling) images to save space
-                    sh 'docker image prune -f'
+                    def imageTag = "${env.DOCKER_HUB_REPO}:${env.BRANCH_NAME}"
+                    echo "Pushing Docker image to DockerHub: ${imageTag}"
+                    docker.withRegistry('https://index.docker.io/v1/', "${env.DOCKER_HUB_CREDENTIALS}") {
+                        sh "docker push ${imageTag}"
+                    }
                 }
             }
         }
@@ -96,5 +92,3 @@ pipeline {
         }
     }
 }
-
-

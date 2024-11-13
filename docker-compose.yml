@@ -15,7 +15,7 @@
       devops-back:
         depends_on:
           - mysqldb
-        image: oudaybenmessaoud/ouday-5se1-g4-projet4:v10.0.0
+        image: oudaybenmessaoud/ouday-5se1-g4-projet4:v11.0.0
         restart: on-failure
         ports:
           - 8089:8089

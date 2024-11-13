@@ -14,8 +14,10 @@
     <name>DevOps_Project</name>
     <description>DevOps_Project</description>
     <properties>
-        <!-- Only keep the JaCoCo report path here -->
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <java.version>11</java.version>
+        <sonar.projectKey>tn.esprit.fares.devops_project</sonar.projectKey>
+        <sonar.host.url>http://192.168.177.128:9000</sonar.host.url>
+        <sonar.login>f8a6e4f8ed8a8c33b95fe1ab07112f65cba8b6cd</sonar.login>
     </properties>
     <dependencies>
         <dependency>
@@ -93,36 +95,8 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Plugin SonarQube -->
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.9.1.2184</version> <!-- Assurez-vous d'utiliser la dernière version disponible -->
-            </plugin>
         </plugins>
     </build>
-
     <distributionManagement>
         <repository>
             <id>nexus</id>

@@ -23,6 +23,7 @@
         <sonar.projectKey>tn.esprit.ouday.devops_project</sonar.projectKey>
         <sonar.host.url>http://192.168.178.129:9000</sonar.host.url>
         <sonar.login>faac6c0de7a26cd17d1674dd2708389cc87b9db3</sonar.login>
+        <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
     </properties>
 
     <!-- Project Dependencies -->
@@ -91,6 +92,25 @@
     <!-- Build Configuration -->
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>

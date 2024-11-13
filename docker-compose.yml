@@ -2,15 +2,20 @@ version: '3.8'
 
 services:
   spring-app:
-    image: oudaybenmessaoud/ouday-5se1-g4-projet4:v10.0.0  # Remplacer avec votre tag d'image Docker correct
+    image: oudaybenmessaoud/ouday-5se1-g4-projet4:v10.0.0  # Remplacer par l'image Docker correcte
     ports:
       - "8082:8082"  # Mappe le port de votre conteneur vers le port local
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testdb
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testdb?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: rootpassword
       SPRING_JPA_DATABASEPLATFORM: org.hibernate.dialect.MySQL5InnoDBDialect
-      SPRING_H2_CONSOLE_ENABLED: false
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: true
+      SPRING_H2_CONSOLE_ENABLED: false  # Désactive la console H2, car on utilise MySQL
+      SPRING_SQL_INIT_MODE: always  # Initialise la base de données à chaque démarrage
+
     depends_on:
       - mysql  # L'application Spring doit attendre que MySQL soit prêt avant de démarrer
 
@@ -18,11 +23,11 @@ services:
     image: mysql:8.0.3  # Utilisation de MySQL 8.0.3
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: testdb
+      MYSQL_DATABASE: testdb  # Crée la base de données 'testdb'
     ports:
       - "3306:3306"  # Expose le port MySQL sur l'hôte local
     volumes:
-      - mysql-data:/var/lib/mysql  # Persiste les données entre les redémarrages de conteneur
+      - mysql-data:/var/lib/mysql  # Persiste les données entre les redémarrages du conteneur
 
 volumes:
   mysql-data:  # Volume persistant pour les données MySQL

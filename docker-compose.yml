@@ -1,33 +1,43 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  spring-app:
-    image: oudaybenmessaoud/ouday-5se1-g4-projet4:v10.0.0  # Remplacer par l'image Docker correcte
-    ports:
-      - "8082:8082"  # Mappe le port de votre conteneur vers le port local
+  mysqldb:
+    image: mysql:8.0.30
+    restart: unless-stopped
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/testdb?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: rootpassword
-      SPRING_JPA_DATABASEPLATFORM: org.hibernate.dialect.MySQL5InnoDBDialect
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_JPA_SHOW_SQL: "true"  # Valeur booléenne en chaîne de caractères
-      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"  # Valeur booléenne en chaîne de caractères
-      SPRING_H2_CONSOLE_ENABLED: "false"  # Valeur booléenne en chaîne de caractères
-      SPRING_SQL_INIT_MODE: always  # Initialise la base de données à chaque démarrage
-
-    depends_on:
-      - mysql  # L'application Spring doit attendre que MySQL soit prêt avant de démarrer
-
-  mysql:
-    image: mysql:8.0.3  # Utilisation de MySQL 8.0.3
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: testdb  # Crée la base de données 'testdb'
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=testdb
     ports:
-      - "3306:3306"  # Expose le port MySQL sur l'hôte local
+      - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql  # Persiste les données entre les redémarrages du conteneur
+      - db:/var/lib/mysql
+
+  devops-back:
+    depends_on:
+      - mysqldb
+    image: oudaybenmessaoud/ouday-5se1-g4-projet4:v10.0.0  # Remplacez par l'image correcte
+    restart: on-failure
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_APPLICATION_JSON: >
+        {
+          "spring.datasource.url": "jdbc:mysql://mysqldb:3306/testdb?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+          "spring.datasource.username": "root",
+          "spring.datasource.password": "rootpassword",
+          "spring.datasource.driver-class-name": "com.mysql.cj.jdbc.Driver",
+          "spring.jpa.database-platform": "org.hibernate.dialect.MySQL5InnoDBDialect",
+          "spring.jpa.hibernate.ddl-auto": "update",
+          "spring.jpa.show-sql": "true",
+          "spring.jpa.properties.hibernate.format_sql": "true",
+          "spring.h2.console.enabled": "false",
+          "spring.sql.init.mode": "always",
+          "server.port": "8089",
+          "spring.datasource.initialization-mode": "always",
+          "spring.datasource.platform": "mysql"
+        }
+    stdin_open: true
+    tty: true
 
 volumes:
-  mysql-data:  # Volume persistant pour les données MySQL
+  db:

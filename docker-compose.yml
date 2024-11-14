@@ -37,7 +37,7 @@ services:
         }
     stdin_open: true
     tty: true
-    entrypoint: ["/bin/sh", "-c", "while ! nc -z mysqldb 3306; do echo 'Waiting for MySQL...'; sleep 5; done; java -jar /app.jar"]
+    entrypoint: ["/bin/sh", "-c", "while ! mysqladmin ping -h mysqldb --silent; do echo 'Waiting for MySQL...'; sleep 5; done; java -jar /app.jar"]
 
 volumes:
   db:

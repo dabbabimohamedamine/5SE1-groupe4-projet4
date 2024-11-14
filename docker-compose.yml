@@ -11,17 +11,10 @@ services:
       - "3306:3306"
     volumes:
       - db:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 30s
-      retries: 3
-      start_period: 10s
-      timeout: 10s
 
   devops-back:
     depends_on:
-      mysqldb:
-        condition: service_healthy  # Démarre le service uniquement lorsque MySQL est prêt
+      - mysqldb
     build:
       context: .
       dockerfile: Dockerfile
@@ -44,7 +37,6 @@ services:
         }
     stdin_open: true
     tty: true
-    entrypoint: ["/bin/sh", "-c", "while ! nc -z mysqldb 3306; do echo 'Waiting for MySQL...'; sleep 5; done; java -jar /app.jar"]
 
 volumes:
   db:

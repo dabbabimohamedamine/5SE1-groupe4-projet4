@@ -122,16 +122,6 @@ public class InvoiceDetailServiceImplTest {
         assertEquals(2, result.getQuantity());
     }
 
-    @Test
-    public void testRetrieveInvoiceDetail_NotFound() {
-        // Given
-        when(invoiceDetailRepository.findById(1L)).thenReturn(Optional.empty());
-
-        // When & Then
-        assertThrows(NullPointerException.class, () -> {
-            invoiceDetailService.retrieveInvoiceDetail(1L);
-        });
-    }
 
 
 

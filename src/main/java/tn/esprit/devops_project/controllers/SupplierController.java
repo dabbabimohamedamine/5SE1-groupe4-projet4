@@ -12,7 +12,7 @@ public class SupplierController {
 
 	ISupplierService supplierService;
 
-	@GetMapping("/supplier")
+	@GetMapping("/getsupplier")
 	public List<SupplierDTO> getSuppliers() {
 		return supplierService.retrieveAllSuppliers();
 	}

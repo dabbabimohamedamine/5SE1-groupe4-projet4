@@ -18,6 +18,8 @@ public class Stock implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long idStock;
     String title;
+    Double price;
+    String category;
     @OneToMany(mappedBy = "stock")
-    Set<Product> products;
+    private Set<Product> products;
 }

@@ -28,6 +28,16 @@ public class StockController {
     List<Stock> retrieveAllStock(){
         return stockService.retrieveAllStock();
     }
-
+    @GetMapping("/search")
+    public List<Stock> searchAndSortStock(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending
+    ) {
+        return stockService.searchAndSortStock(title, category, minPrice, maxPrice, sortBy, ascending);
+    }
 
 }

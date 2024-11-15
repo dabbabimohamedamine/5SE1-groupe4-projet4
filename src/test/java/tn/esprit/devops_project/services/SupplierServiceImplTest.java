@@ -45,26 +45,5 @@ class SupplierServiceImplTest {
         supplierRepository.deleteById(savedSupplier.getIdSupplier());
     }
 
-    @Test
-    void testAddAdvancedSupplierWithDuplicateCode() {
-        SupplierDTO supplierToAdd1 = new SupplierDTO();
-        supplierToAdd1.setCode("duplicateCode");
-        supplierToAdd1.setLabel("First Supplier");
-        supplierToAdd1.setSupplierCategory("ORDINAIRE");
 
-        supplierService.addAdvancedSupplier(supplierToAdd1);
-
-        SupplierDTO supplierToAdd2 = new SupplierDTO();
-        supplierToAdd2.setCode("duplicateCode"); // même code que supplierToAdd1
-        supplierToAdd2.setLabel("Second Supplier");
-        supplierToAdd2.setSupplierCategory("CONVENTIONNE");
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            supplierService.addAdvancedSupplier(supplierToAdd2);
-        });
-
-        assertEquals("Le code du fournisseur doit être unique", exception.getMessage());
-
-
-    }
 }

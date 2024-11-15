@@ -1,6 +1,6 @@
 pipeline {
     agent any
- 
+
     environment {
         SONARQUBE_URL = 'http://192.168.17.128:9000'
         SONARQUBE_TOKEN = credentials('new-sonar-token')
@@ -29,12 +29,13 @@ pipeline {
             }
         }
 
-       stage('Start SonarQube and Nexus') {
+        stage('Start SonarQube and Nexus') {
             steps {
                 echo 'Starting SonarQube and Nexus services...'
                 sh 'docker-compose -f docker-compose-ci.yml up -d'
-                sh 'docker-compose -f docker-compose-ci.yml ps' 
+                sh 'docker-compose -f docker-compose-ci.yml ps'
             }
+        }
 
         stage('SonarQube Analysis') {
             steps {

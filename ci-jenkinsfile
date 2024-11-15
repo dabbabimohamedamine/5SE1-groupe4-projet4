@@ -30,11 +30,22 @@ pipeline {
         }
 
         stage('Start SonarQube and Nexus') {
-            steps {
-                echo 'Starting SonarQube and Nexus services...'
+    steps {
+        script {
+            // Check if each container is running and start only if needed
+            def sonarRunning = sh(script: 'docker ps -q -f name=sonarqube', returnStatus: true) == 0
+            def nexusRunning = sh(script: 'docker ps -q -f name=nexus', returnStatus: true) == 0
+
+            if (!sonarRunning || !nexusRunning) {
+                echo 'Starting SonarQube and Nexus containers...'
                 sh 'docker-compose -f ./docker-compose-ci.yml up -d --no-recreate'
+            } else {
+                echo 'SonarQube and Nexus containers are already running, skipping startup...'
             }
         }
+    }
+}
+
 
         stage('SonarQube Analysis') {
             steps {

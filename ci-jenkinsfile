@@ -29,13 +29,6 @@ pipeline {
             }
         }
 
-        stage('Start SonarQube and Nexus') {
-            steps {
-                echo 'Starting SonarQube and Nexus services...'
-                sh 'sudo docker-compose -f /home/amine/docker-compose-ci.yml up -d'
-            }
-        }
-
         stage('SonarQube Analysis') {
             steps {
                 echo 'Running SonarQube analysis...'

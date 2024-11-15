@@ -29,6 +29,13 @@ pipeline {
             }
         }
 
+       stage('Start SonarQube and Nexus') {
+            steps {
+                echo 'Starting SonarQube and Nexus services...'
+                sh 'docker-compose -f docker-compose-ci.yml up -d'
+                sh 'docker-compose -f docker-compose-ci.yml ps' 
+            }
+
         stage('SonarQube Analysis') {
             steps {
                 echo 'Running SonarQube analysis...'

@@ -26,29 +26,27 @@ public class ProductServiceImpl implements IProductService {
     public Product addProduct(Product product, Long idStock) {
         Logger logger = LoggerFactory.getLogger(this.getClass());
 
-        // Retrieve the stock by ID or throw an exception if not found
         Stock stock = stockRepository.findById(idStock)
                 .orElseThrow(() -> new NullPointerException("Stock not found with ID: " + idStock));
 
         logger.info("Adding product to stock with ID: {}", idStock);
 
-        // Input Validation
         if (product.getTitle() == null || product.getTitle().isEmpty()) {
             product.setTitle("Untitled Product");
             logger.warn("Product title is empty. Setting default title: 'Untitled Product'");
         }
 
         if (product.getPrice() == 0) {
-            product.setPrice(10.0f); // Set default price if invalid
+            product.setPrice(10.0f);
             logger.warn("Product price is invalid 😊 0). Setting default price: 10.0");
         }
 
         if (product.getQuantity() < 0) {
-            product.setQuantity(0); // Set default quantity if invalid
+            product.setQuantity(0);
             logger.warn("Product quantity is negative. Setting default quantity: 0");
         }
 
-        // Auto-assign category based on the product title
+
         if (product.getCategory() == null) {
             if (product.getTitle().toLowerCase().contains("book")) {
                 product.setCategory(ProductCategory.BOOKS);
@@ -62,7 +60,7 @@ public class ProductServiceImpl implements IProductService {
             }
         }
 
-        // Link product to stock and save it
+
         product.setStock(stock);
         Product savedProduct = productRepository.save(product);
 

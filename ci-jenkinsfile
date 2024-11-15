@@ -9,13 +9,6 @@ pipeline {
 
     stages {
 
-        stage('Start SonarQube and Nexus') {
-    steps {
-                echo 'Starting SonarQube and Nexus containers...'
-                sh 'docker-compose -f ./docker-compose-ci.yml up -d --no-recreate'    
-        }
-    }
-
         stage('Checkout GIT') {
             steps {
                 cleanWs()

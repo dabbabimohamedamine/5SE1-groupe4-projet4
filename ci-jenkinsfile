@@ -32,7 +32,7 @@ pipeline {
         stage('Start SonarQube and Nexus') {
             steps {
                 echo 'Starting SonarQube and Nexus services...'
-                sh 'docker-compose -f /home/amine/docker-compose-ci.yml up -d'
+                sh 'sudo docker-compose -f /home/amine/docker-compose-ci.yml up -d'
             }
         }
 

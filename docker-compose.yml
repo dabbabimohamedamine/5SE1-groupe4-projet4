@@ -14,7 +14,8 @@ services:
 
   devops-back:
     depends_on:
-      - mysqldb
+      mysqldb:
+        condition: service_healthy
     image: aniskh643/anis-5se1-g4-projet4:null
     restart: on-failure
     ports:
